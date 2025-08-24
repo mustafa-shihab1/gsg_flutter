@@ -27,10 +27,10 @@ class FreelancerCard extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 10),
-                  Text('Wade Warren'),
+                  Text('Wade Waren', style: TextStyle(fontSize: 13)),
                   Text(
                     'Beautician',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
