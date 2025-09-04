@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gsg_flutter/routes.dart';
 
 import '../widgets/custom_text_field.dart';
 import 'home_view.dart';
@@ -27,30 +28,70 @@ class SignupView extends StatelessWidget {
                   'https://cdni.iconscout.com/illustration/premium/thumb/mobile-login-5650377-4707996.png',
                 ),
                 CustomTextField(hintText: "Name", controller: nameController),
-                CustomTextField(hintText: "Email", controller: emailController),
+                CustomTextField(
+                  hintText: "Email",
+                  controller: emailController,
+                  validate: (email) {
+                    if (!email!.contains('@') || !email.contains('.')) {
+                      return "Enter a valid email";
+                    }
+                    return null;
+                  },
+                ),
                 CustomTextField(
                   hintText: "Password",
                   isPassword: true,
                   controller: passwordController,
+                  validate: (password) {
+                    if (password!.length < 8) {
+                      return "Password must be at least 8 charachters";
+                    }
+                    return null;
+                  },
                 ),
                 CustomTextField(
                   hintText: "Confirm Password",
                   isPassword: true,
                   controller: confirmPasswordController,
+                  validate: (confirmPassword) {
+                    if (confirmPassword != passwordController.text) {
+                      return "Passwords do not match";
+                    }
+                    return null;
+                  },
                 ),
                 CustomTextField(
                   hintText: "Phone Number",
                   controller: phoneController,
+                  validate: (phone) {
+                    if (phone!.startsWith('05')) return null;
+                    return "Enter a valid phone number";
+                  },
                 ),
 
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginView()),
-                    );
-                  },
-                  child: Text('You have an account? Sign In'),
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.pushReplacement(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => LoginView()),
+                //     );
+                //   },
+                //   child: Text('You have an account? Sign In'),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('You already have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, Routes.login);
+                      },
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
 
@@ -64,7 +105,7 @@ class SignupView extends StatelessWidget {
                     fixedSize: Size(150, 50),
                   ),
                   onPressed: () {
-                    _login(context);
+                    _signUp(context);
                   },
                   child: Text('Sign Up'),
                 ),
@@ -76,31 +117,18 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  void _login(BuildContext context) {
-    var email = emailController.text;
-    var password = passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
+  void _signUp(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.home,
+        arguments: nameController.text,
+      );
+    } else {
       _showSnackBar(
         context: context,
         contentText: 'Please enter valid credentials',
       );
-    } else if (email.contains('@') && email.contains('.')) {
-      if (password.length >= 8) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeView()),
-        );
-        emailController.clear();
-        passwordController.clear();
-      } else {
-        _showSnackBar(
-          context: context,
-          contentText: 'Password must be at least 8 chars',
-        );
-      }
-    } else {
-      _showSnackBar(context: context, contentText: 'Please enter valid email');
     }
   }
 

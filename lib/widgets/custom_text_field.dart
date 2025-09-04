@@ -4,18 +4,21 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool isPassword;
   final TextEditingController? controller;
-  const CustomTextField({
+  String? Function(String?)? validate;
+  CustomTextField({
     super.key,
     required this.hintText,
     this.isPassword = false,
     required this.controller,
+    this.validate,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50.0),
-      child: TextField(
+      child: TextFormField(
+        validator: validate,
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
