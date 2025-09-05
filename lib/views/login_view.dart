@@ -96,11 +96,6 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  // void fetchData() async {
-  //   var result = await get(Uri.parse('https://fakestoreapi.com/products'));
-  //   log(result.body);
-  // }
-
   void _login(BuildContext context) async {
     setState(() {
       isLoading = true;
